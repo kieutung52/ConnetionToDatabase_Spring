@@ -51,15 +51,43 @@ public class UserService {
         return false;
     }
 
-    public void deleteUSer(String id) {
-        userRepository.existsById(id); // tra ve true hoac false
+    public void deleteUSer(String id) {  
+        boolean exists = userRepository.existsById(id); 
+        if (!exists) {
+            System.out.println(" User khong ton tai voi id = " + id);
+            return;
+        }
+
         userRepository.deleteById(id);
+        System.out.println("Da xoa user voi id = " + id);
     }
 
     public void UpdateUser(String id, User newData) {
-        User u_database = userRepository.findByUserId(id);// tra ve 1 User hoac null
-        u_database.setEmail(newData.getEmail());
-        //....
+        if (newData == null) {
+            System.out.println("Update that bai");
+            return;
+        }
+
+        User u_database = userRepository.findByUserId(id); // tra ve 1 User hoac null
+        if (u_database == null) {
+            System.out.println(" User khong ton tai voi id = " + id);
+            return;
+        }
+
+        if (newData.getEmail() != null) {
+            u_database.setEmail(newData.getEmail());
+        }
+        if (newData.getPassword() != null) {
+            u_database.setPassword(newData.getPassword());
+        }
+        if (newData.getFullName() != null) {
+            u_database.setFullName(newData.getFullName());
+        }
+        if (newData.getRole() != null) {
+            u_database.setRole(newData.getRole());
+        }
+
         userRepository.save(u_database);
+        System.out.println("Da cap nhat user voi id = " + id);
     }
 }
